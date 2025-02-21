@@ -1,13 +1,12 @@
 ﻿using System.Text.Json;
 using UsandoLinq.Modelos;
 
-List<int> NumerosRepetios =  new List<int>() { 1, 5, 1, 3, 2, 4, 2, 10, 0, 2, 1, 7};
+List<int> NumerosRepetios = new List<int>() { 1, 5, 1, 3, 2, 4, 2, 10, 0, 2, 1, 7 };
 var numerosNaoRepetido = NumerosRepetios.GroupBy(i => i).Where(g => g.Count() == 1).Select(g => g.Key);
 foreach (var item in numerosNaoRepetido)
 {
     Console.WriteLine(item);
 }
-
 
 List<Livro> livros = new List<Livro>();
 
@@ -15,7 +14,8 @@ using(HttpClient client = new HttpClient())
 {
 	try
 	{
-        var result = await client.GetStringAsync("");
+        var result = await client.GetStringAsync(@"https://raw.githubusercontent.com/ArthurOcFernandes/Exerc-cios-C-/curso-4-aula-2/Jsons/Livros.json");
+        //Console.WriteLine(result);
         livros = JsonSerializer.Deserialize<List<Livro>>(result);
     }
 	catch (Exception ex)
@@ -25,10 +25,19 @@ using(HttpClient client = new HttpClient())
 }
 
 var livrosPublicadosDepois2000 = livros.Where(l => l.Ano >= 2000).OrderBy(l => l.Titulo).Select(l => l.Titulo).ToList();
-foreach (var item in livrosPublicadosDepois2000)
+
+if(livrosPublicadosDepois2000.Count > 0)
 {
-    Console.WriteLine(item);
+    foreach (var item in livrosPublicadosDepois2000)
+    {
+        Console.WriteLine($"Livros publicados: {item}");
+    }
 }
+else
+{
+    Console.WriteLine("Nnão há livros publicados depois de 2000");
+}
+
 
 List<Produto> produtos = new List<Produto>
 {
